@@ -3,12 +3,14 @@ package hwr.oop.todolist;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.Date;
 
-class Task {
+class Task implements Serializable {
     private Date date;
-    private String status;
+    private Status status = Status.INCOMPLETE;
     private String title;
+    private static final long serialVersionUID = 8367141910137788612L;
 
 
 
@@ -22,14 +24,12 @@ class Task {
         } else this.title = title;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return this.status;
     }
 
-    public void setStatus(@NotNull String status) throws NullPointerException {
-        if (status.trim().equals("")) {
-            throw new NullPointerException("The Status of the Task has to be set.");
-        } else this.status = status;
+    public void setStatus(@NotNull Status status) throws NullPointerException {
+        this.status = status;
     }
 
     public Date getDate() {

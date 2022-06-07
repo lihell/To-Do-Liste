@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 class ToDoList {
-    private List<Task> toDoList;
+    private List<Task> toDoList = new ArrayList<>();
 
-    public ToDoList() {
-        toDoList = new ArrayList<>();
-    }
 
     public void addTask(Task task) {
-        this.toDoList.add(task);
+        toDoList.add(task);
     }
 
     public void deleteTask(int index) throws IndexOutOfBoundsException {

@@ -7,7 +7,6 @@ import java.util.Scanner;
 
 public class FileVerify implements Serializable {
 
-    private String filename = "accounts.txt";
     Account account;
     public boolean verifyAccount(Account account) {
 
@@ -16,8 +15,8 @@ public class FileVerify implements Serializable {
         String tempPassword;
 
         try {
-            Scanner x = new Scanner(new File(String.valueOf(filename)));
-            x.useDelimiter("[,\n]");
+            Scanner x = new Scanner(new File("accounts.txt"));
+            x.useDelimiter("[/0\n]");
 
             while(x.hasNext() && !found) {
                 tempUsername = x.next();

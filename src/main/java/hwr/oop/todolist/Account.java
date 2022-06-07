@@ -2,6 +2,8 @@ package hwr.oop.todolist;
 
 //using Files for saving Accounts
 
+import java.util.Objects;
+
 class Account {
     private String password;
     private String name;
@@ -13,12 +15,16 @@ class Account {
         this.password = password;
     }
 
+    Account() {
 
-    public void setNewPassword() {
-        if (password != null) {
+    }
+
+
+    public void setNewPassword(String password) throws NullPointerException{
+        if (!Objects.equals(password, "null")) {
             this.password = password;
         } else {
-            System.out.println("Please write a password!!");
+            throw new NullPointerException("Please write a password");
         }
     }
 
@@ -26,27 +32,14 @@ class Account {
         return password;
     }
 
-    public void setNewName() {
-        if (name != null) {
+    public void setNewName(String name) throws NullPointerException {
+        if (!Objects.equals(name, "")) {
             this.name = name;
         } else {
-            System.out.println("Please write a name!!");
+            throw new NullPointerException("Please write a name");
         }
     }
     public String getNewName() {
         return name;
     }
-
-    public Account getAccount() {
-        return new Account(this.name, this.password);
-    }
-
-    /*public ToDoList saveToDoListToAccount(ToDoList todo) {
-        return ;
-    }
-
-    public onlyOneListPerAccount() {
-
-    }*/
-
 }
