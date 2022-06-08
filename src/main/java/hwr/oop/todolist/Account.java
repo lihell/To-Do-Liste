@@ -2,9 +2,11 @@ package hwr.oop.todolist;
 
 //using Files for saving Accounts
 
+import java.io.Serializable;
 import java.util.Objects;
 
-class Account {
+class Account implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String password;
     private String name;
 

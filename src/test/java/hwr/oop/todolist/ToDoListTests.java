@@ -1,11 +1,7 @@
 package hwr.oop.todolist;
 
 
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -203,11 +199,42 @@ public class ToDoListTests {
         class FileTest {
 
             @Test
-            void fileExists() throws IOException {
+            void canWriteAccountToFile() throws IOException {
                 Account acc = new Account("Nila", "Hallo123");
                 FileSaving save = new FileSaving();
                 save.writeAccountToFile(acc);
-                
+            }
+
+            @Test
+            void canWriteMoreThanOneAccountToFile() throws IOException {
+                Account acc = new Account("Nila", "Hallo123");
+                Account accone = new Account("Mani", "myMoney340");
+                Account acctwo = new Account("Sara", "headEmptyAlways11111");
+                FileSaving save = new FileSaving();
+                save.writeAccountToFile(acc);
+                save.writeAccountToFile(accone);
+                save.writeAccountToFile(acctwo);
+            }
+
+            @Test
+            void canVerifyExistingAccount() {
+                Account acc = new Account("Nila", "Hallo123");
+                FileVerify verify = new FileVerify();
+                Assertions.assertThat(verify.verifyAccount(acc)).isEqualTo(true);
+            }
+
+            @Test
+            void canGiveErrorForNonExistingAccount() {
+                Account acc = new Account("Max", "M31N3_B4HN");
+                FileVerify verify = new FileVerify();
+                Assertions.assertThat(verify.verifyAccount(acc)).isEqualTo(false);
+            }
+
+            @Test
+            void canCreateFolderForNewAccount() throws IOException {
+                Account acc = new Account("Nila", "Hallo123");
+                FileSaving save = new FileSaving();
+                save.createFolderForAccount(acc);
             }
         }
     @Nested
