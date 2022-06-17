@@ -8,8 +8,8 @@ This repository contains a student project created for an ongoing lecture on obj
 
 ## Abstract
 
-[TODO]: # (Write a short description of your project.)
-[TODO]: # (State most important features.)
+Description : This Project is a ToDoList.  
+Important Features : # (State most important features.)  
 [TODO]: # (State the most interesting problems you encountered during the project.)
 
 ## Feature List

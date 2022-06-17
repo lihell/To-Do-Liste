@@ -3,35 +3,39 @@ package hwr.oop.todolist;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.util.List;
 
 
 public class FileSaving  {
+    FileVerify verify = new FileVerify();
 
 
     void writeAccountToFile(@NotNull Account account) throws IOException {
         try (FileWriter writer = new FileWriter("account.txt", true)) {
-            writer.write(account.getNewName() + "\0" + account.getNewPassword() + "\n");
-            System.out.println("Account has been successfully saved");
-        } catch (IOException ex) {
-            System.out.println("Error: Couldn't create file");
+            if (verify.verifyAccount(account)) {
+                System.out.println("Account already exists");
+            } else {
+                writer.write(account.getName() + "\0" + account.getPassword() + "\n");
+                System.out.println("Account has been successfully saved");
+            }
+        } catch (IOException ex){
+            System.out.println("Couldn't find the Account File");
         }
     }
 
-    void createFolderForAccount(@NotNull Account account) throws FileNotFoundException, IOException {
+    void createFolderForAccount(@NotNull Account account) throws IOException {
         String filenamePassword = "Password.txt";
-        String filenameList = "ToDoList.txt";
+        String filenameList = account.getName() + "'s ToDoList.txt";
         boolean success;
-        File directory = new File(account.getNewName());
+        File directory = new File(account.getName());
         if (directory.exists() && directory.isDirectory()) {
             System.out.println("This Account already exists");
         } else {
             System.out.println("Thank you for creating an Account, it will be saved swiftly");
             success = directory.mkdirs();
             if (success) {
-                System.out.println("Successfully created your new Account : %s%n" + account.getNewName());
+                System.out.println("Successfully created your new Account : %s%n" + account.getName());
             } else {
-                System.out.println("Failed to create the new Account : %s%n" + account.getNewName());
+                System.out.println("Failed to create the new Account : %s%n" + account.getName());
                 System.out.println("The Account you have tried to make might not be in our guidelines, please try to make another one");
             }
         }
@@ -42,7 +46,7 @@ public class FileSaving  {
             System.out.println("Creating File for password now");
             success = passwordFile.createNewFile();
             try (FileWriter writer = new FileWriter(passwordFile)) {
-                writer.write(account.getNewPassword().hashCode());
+                writer.write(account.getPassword().hashCode());
             } catch (IOException e) {
                 System.out.println("No Account has been set, please write use an Account");
             }
@@ -66,16 +70,17 @@ public class FileSaving  {
         }
     }
 
-    void writeToDoListToFile(List<Task> savedTasks, @NotNull Account account) throws IOException {
+    void writeToDoListToFile(ToDoList todo, @NotNull Account account) throws IOException {
 
-        try (ObjectOutputStream out = new ObjectOutputStream((new FileOutputStream(  account.getNewName() + "/ToDoList.txt")))) {
-            out.writeObject(savedTasks);
+        try (ObjectOutputStream out = new ObjectOutputStream((new FileOutputStream(  account.getName() + "/" + account.getName() + "'s ToDoList.txt")))) {
+            out.writeObject(todo.getToDoList());
         } catch (IOException e) {
-            System.out.println("Got IOException, " + e);
+            System.out.println("Couldn't find the File to write the ToDoList in, " + e);
+            System.out.println("Your problem could be your Account, try to open your Account again");
         }
         System.out.println("TASKS SAVED: ");
         System.out.println();
-        savedTasks.forEach(task -> System.out.println("* " + task.getTitle()));
+        todo.getToDoList().forEach(task -> System.out.println("* " + task.getTitle()));
     }
 
 }

@@ -18,7 +18,7 @@ class MenuFunction {
     }
 
 
-    public void displayOptions() throws ParseException {
+    public void displayOptions() {
         System.out.println("---------------------------------------------------------------------------------------------------------------------");
         System.out.println(String.format("  %55s", "                To do List          "));
         System.out.println("---------------------------------------------------------------------------------------------------------------------");
@@ -37,17 +37,33 @@ class MenuFunction {
         System.out.println("Name of the Account:");
 
         Account account = new Account();
-        account.setNewName(userInput());
+        account.setName(userInput());
         System.out.println("What is your new password?");
-        account.setNewPassword(userInput());
+        account.setPassword(userInput());
         FileVerify verify = new FileVerify();
-        if (verify.verifyAccount(account) == true) {
+        if (verify.verifyAccount(account)) {
             System.out.println("An Account with these parameters already exists, please choose a different name/password");
+            createNewAccount();
         } else {
             System.out.println("You have successfully made an Account");
+            FileSaving save = new FileSaving();
+            save.writeAccountToFile(account);
+            save.createFolderForAccount(account);
         }
-        FileSaving save = new FileSaving();
-        save.writeAccountToFile(account);
+    }
+
+    public void callAccountForActions() {
+        System.out.println("Please tell us your Account");
+        System.out.println("The name of the Account: ");
+
+        Account acc = new Account();
+        acc.setName(userInput());
+        System.out.println("Your Password: ");
+        acc.setPassword(userInput());
+        FileVerify verify = new FileVerify();
+        if (verify.verifyAccount(acc) == true) {
+            System.out.println("Welcome back, " + acc.getName() + ", " + acc.getPassword());
+        }
     }
 
     public void addFunction() throws ParseException {

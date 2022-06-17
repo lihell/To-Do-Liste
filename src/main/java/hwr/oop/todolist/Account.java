@@ -22,7 +22,7 @@ class Account implements Serializable {
     }
 
 
-    public void setNewPassword(String password) throws NullPointerException{
+    public void setPassword(String password) throws NullPointerException{
         if (!Objects.equals(password, "null")) {
             this.password = password;
         } else {
@@ -30,18 +30,18 @@ class Account implements Serializable {
         }
     }
 
-    public String getNewPassword() {
+    public String getPassword() {
         return password;
     }
 
-    public void setNewName(String name) throws NullPointerException {
+    public void setName(String name) throws NullPointerException {
         if (!Objects.equals(name, "")) {
             this.name = name;
         } else {
             throw new NullPointerException("Please write a name");
         }
     }
-    public String getNewName() {
+    public String getName() {
         return name;
     }
 }

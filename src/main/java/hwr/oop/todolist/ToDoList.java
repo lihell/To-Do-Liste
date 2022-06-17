@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 class ToDoList {
+    Task task = new Task();
     private List<Task> toDoList = new ArrayList<>();
 
 
@@ -34,4 +35,6 @@ class ToDoList {
     public Task getTaskFromList(int index) {
         return this.toDoList.get(index);
     }
+
 }
+
