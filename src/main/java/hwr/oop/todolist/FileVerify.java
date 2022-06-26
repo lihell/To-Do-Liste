@@ -1,34 +1,34 @@
 package hwr.oop.todolist;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.NoSuchElementException;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.*;
 import java.util.Scanner;
 
 public class FileVerify {
 
 
-    public boolean verifyAccount(Account account) {
+    boolean verifyAccount(@NotNull Account account) {
+        String filenamePassword = account.getName() + "'s Password.txt";
+        File directory = new File(account.getName());
+        File passwordFile = new File(directory, filenamePassword);
+        boolean exists = false;
 
-        boolean found = false;
-        String tempUsername;
-        String tempPassword;
-
-        try {
-            Scanner x = new Scanner(new File("account.txt"));
-            x.useDelimiter("[\0\n]");
-
-            while (x.hasNext() && !found) {
-                tempUsername = x.next();
-                tempPassword = x.next();
-
-                if (tempUsername.trim().equals(account.getName().trim()) && tempPassword.trim().equals(account.getPassword().trim())) {
-                    found = true;
+        try (Scanner scan = new Scanner(passwordFile)) {
+            if (directory.exists() && directory.isDirectory()) {
+                if (passwordFile.exists() && passwordFile.isFile()) {
+                    while (scan.hasNextLine()) {
+                        String line = scan.next();
+                        if (line.contains(account.getPassword())) {
+                            exists = true;
+                        }
+                    }
                 }
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("Can't find a Account");
+        } catch (FileNotFoundException e){
+            System.out.println("The Account doesn't exist");
         }
-        return found;
+        return exists;
     }
 }
+

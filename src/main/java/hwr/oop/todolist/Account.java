@@ -2,11 +2,13 @@ package hwr.oop.todolist;
 
 //using Files for saving Accounts
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Scanner;
 
 class Account implements Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 782336846239423209L;
     private String password;
     private String name;
 
@@ -22,26 +24,28 @@ class Account implements Serializable {
     }
 
 
-    public void setPassword(String password) throws NullPointerException{
-        if (!Objects.equals(password, "null")) {
-            this.password = password;
+    void setPassword(String password) {
+        if(!(password == "")) {
+                this.password = password;
         } else {
-            throw new NullPointerException("Please write a password");
+            System.out.println("You need to write a password");
         }
     }
 
-    public String getPassword() {
+
+
+    String getPassword() {
         return password;
     }
 
-    public void setName(String name) throws NullPointerException {
-        if (!Objects.equals(name, "")) {
-            this.name = name;
+    void setName(String name) {
+        if (!(name == "")) {
+                this.name = name;
         } else {
-            throw new NullPointerException("Please write a name");
+            System.out.println("You need to write a name");
         }
     }
-    public String getName() {
+    String getName() {
         return name;
     }
 }
