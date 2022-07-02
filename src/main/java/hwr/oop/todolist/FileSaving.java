@@ -4,55 +4,39 @@ import org.jetbrains.annotations.NotNull;
 import java.io.*;
 
 
-class FileSaving  {
-    FileVerify verify = new FileVerify();
+class FileSaving implements Save {
 
-    void createFolderForAccount(@NotNull Account account) throws IOException {
+    @Override
+    public void createFolderForAccount(@NotNull Account account) throws IOException {
         String filenamePassword = account.getName() + "'s Password.txt";
         String filenameList = account.getName() + "'s ToDoList.txt";
-        boolean success;
         File directory = new File(account.getName());
         if (directory.exists() && directory.isDirectory()) {
             System.out.println("This Account already exists");
         } else {
-            success = directory.mkdirs();
-            if (success) {
-                System.out.println("Successfully created your new Account : %s%n" + account.getName());
-            } else {
-                System.out.println("Failed to create the new Account : %s%n" + account.getName());
-                System.out.println("The Account you have tried to make might not be in our guidelines, please try to make another one");
-            }
+            directory.mkdirs();
         }
         File passwordFile = new File(directory, filenamePassword);
         if (passwordFile.exists() && passwordFile.isFile()) {
             System.out.println("Password is already there");
         } else {
-            success = passwordFile.createNewFile();
+            passwordFile.createNewFile();
             try (FileWriter writer = new FileWriter(passwordFile)) {
                 writer.write(account.getPassword());
-            } catch (IOException e) {
-                System.out.println("No Account has been set, please use an Account");
-            }
-            if (success) {
-                System.out.println("Successfully created File for Password : %s%n" + filenamePassword);
-            } else {
-                System.out.println("Failed to create new file for Password : %s&n" + filenamePassword);
+            } catch (NullPointerException e) {
+                System.out.println("No Password has been set");
             }
         }
         File listFile = new File(directory, filenameList);
         if (listFile.exists() && listFile.isFile()) {
             System.out.println("ToDoList is already there");
         } else {
-            success = listFile.createNewFile();
-            if (success) {
-                System.out.println("Successfully created File for ToDoList : %s%n" + filenameList);
-            } else {
-                System.out.println("Failed to create new file for ToDoList : %s&n" + filenameList);
-            }
+            listFile.createNewFile();
         }
     }
 
-    void writeToDoListToFile(ToDoList todo, @NotNull Account account) throws IOException {
+    @Override
+    public void writeToDoListToFile(ToDoList todo, @NotNull Account account) throws IOException {
 
         try (ObjectOutputStream out = new ObjectOutputStream((new FileOutputStream(  account.getName() + "/" + account.getName() + "'s ToDoList.txt")))) {
             out.writeObject(todo.getToDoList());

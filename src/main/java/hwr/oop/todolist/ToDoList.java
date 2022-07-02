@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 class ToDoList {
-    Task task = new Task();
     private List<Task> toDoList = new ArrayList<>();
+
     void addTask(Task task) {
         toDoList.add(task);
     }

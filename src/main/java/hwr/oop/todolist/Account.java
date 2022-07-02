@@ -1,11 +1,8 @@
 package hwr.oop.todolist;
 
-//using Files for saving Accounts
 
-import java.io.File;
 import java.io.Serializable;
-import java.util.Objects;
-import java.util.Scanner;
+
 
 class Account implements Serializable {
     private static final long serialVersionUID = 782336846239423209L;
@@ -31,7 +28,6 @@ class Account implements Serializable {
             System.out.println("You need to write a password");
         }
     }
-
 
 
     String getPassword() {

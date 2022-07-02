@@ -5,10 +5,11 @@ import org.jetbrains.annotations.NotNull;
 import java.io.*;
 import java.util.Scanner;
 
-public class FileVerify {
+public class FileVerify implements Verify {
 
 
-    boolean verifyAccount(@NotNull Account account) {
+    @Override
+    public boolean verifyAccount(@NotNull Account account) {
         String filenamePassword = account.getName() + "'s Password.txt";
         File directory = new File(account.getName());
         File passwordFile = new File(directory, filenamePassword);

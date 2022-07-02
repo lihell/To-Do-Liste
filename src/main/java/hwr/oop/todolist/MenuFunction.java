@@ -8,13 +8,15 @@ import java.util.*;
 
 class MenuFunction {
 
+    Save saving = new FileSaving();
+    Load loading = new FileLoading();
+    Verify verify = new FileVerify();
     private final ToDoList todo;
     private final Scanner reader;
     private final DateFormat formatter;
-    private FileLoading loading = new FileLoading();
-    FileSaving save = new FileSaving();
 
-    MenuFunction()  {
+
+    MenuFunction() {
         todo = new ToDoList();
         reader = new Scanner(System.in);
         formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -34,12 +36,13 @@ class MenuFunction {
         System.out.println("Please enter your Choice");
     }
 
-    void chooseLogIn() throws IOException {
+    void chooseLogIn() throws IOException, ParseException {
         int choice = reader.nextInt();
         if (choice == 1) {
             createNewAccount();
         } else if (choice == 2) {
             logIn();
+            displayOptionsList();
         }
     }
 
@@ -47,23 +50,33 @@ class MenuFunction {
         System.out.println("---------------------------------------------------------------------------------------------------------------------");
         System.out.println("                To Do List          ");
         System.out.println("---------------------------------------------------------------------------------------------------------------------");
-        System.out.println("    1- Display List        ");
-        System.out.println("    2- Add New Task        ");
-        System.out.println("    3- Edit Task           ");
-        System.out.println("    4- Delete Task         ");
-        System.out.println("    5- Delete List         ");
-        System.out.println("    6- Save & Exit         ");
+        System.out.println("    1- Display List            ");
+        System.out.println("    2- Add New Task            ");
+        System.out.println("    3- Change Status           ");
+        System.out.println("    4- Delete Task             ");
+        System.out.println("    5- Delete List             ");
+        System.out.println("    6- Exit                    ");
         System.out.println("---------------------------------------------------------------------------------------------------------------------");
         System.out.println(" Enter correct option");
         int choice = reader.nextInt();
         if (choice == 1) {
             displayListFromAccount();
         } else if (choice == 2) {
+            loading.loadFromFile(logIn());
             addFunction();
+            saving.writeToDoListToFile(todo, logIn());
+        } else if (choice == 3) {
+            changeStatus();
         } else if (choice == 4) {
+            loading.loadFromFile(logIn());
             deleteFunction();
+            saving.writeToDoListToFile(todo, logIn());
         } else if (choice == 5) {
+            loading.loadFromFile(logIn());
             deleteAllFunction();
+            saving.writeToDoListToFile(todo, logIn());
+        } else if (choice == 6) {
+            System.exit(0);
         } else {
             displayOptionsList();
         }
@@ -78,15 +91,13 @@ class MenuFunction {
         acc.setName(userInput());
         System.out.println("What is your new password?");
         acc.setPassword(userInput());
-        FileVerify verify = new FileVerify();
-        if (!verify.verifyAccount(acc)) {
+        if (!(verify.verifyAccount(acc))) {
             System.out.println("You have successfully made an Account");
         } else {
             System.out.println("An Account with these parameters already exists, please choose a different name/password");
             logInDisplay();
         }
-        FileSaving save = new FileSaving();
-        save.createFolderForAccount(acc);
+        saving.createFolderForAccount(acc);
         logIn();
     }
 
@@ -112,9 +123,11 @@ class MenuFunction {
         acc.setName(userInput());
         System.out.println("Your Password: ");
         acc.setPassword(userInput());
-        FileVerify verify = new FileVerify();
         if (verify.verifyAccount(acc)) {
             System.out.println("Welcome back, " + acc.getName() + ", " + acc.getPassword());
+        } else {
+            System.out.println("This Account does not exist");
+            System.out.println("Please choose an existing Account or make a new one");
         }
         return new Account(acc.getName(), acc.getPassword());
     }
@@ -133,13 +146,12 @@ class MenuFunction {
             System.out.println("Input of date was in wrong format. REQUIRED FORMAT: (yyyy-MM-dd)");
         }
         todo.addTask(task);
-        displayOptionsList();
     }
 
     void changeStatus() throws IOException, ParseException {
         System.out.println("What task do you want to mark as done? \n ");
         todo.setToDoList(loading.loadFromFile(logIn()));
-        List<Task> listOfToDos= todo.getToDoList();
+        List<Task> listOfToDos = todo.getToDoList();
         for (Task list :listOfToDos) {
             System.out.print(listOfToDos.indexOf(list) + 1 + ". ");
             System.out.println(String.format("%1$-25s", list.getTitle()));
@@ -156,12 +168,11 @@ class MenuFunction {
                 displayOptionsList();
             }
         } catch (Exception e) {
-            System.out.println("Task with selected index does not exist. Select number in front of task again:");
+            System.out.println("Task with selected index does not exist. Select number in front of task again: ");
+            Integer.parseInt(userInput());
         }
-
         searched.setStatus(Status.DONE);
         System.out.println("Task is now set to DONE");
-        displayOptionsList();
     }
 
     void deleteFunction() throws IOException, ParseException {
@@ -186,7 +197,6 @@ class MenuFunction {
             System.out.println("Task with selected index does not exist. Select number in front of task again:");
         }
         System.out.println("Task is removed");
-        displayOptionsList();
     }
 
     void deleteAllFunction() throws IOException, ParseException {
@@ -210,6 +220,4 @@ class MenuFunction {
             System.out.println("Please put in a number");
         }
     }
-
-
 }

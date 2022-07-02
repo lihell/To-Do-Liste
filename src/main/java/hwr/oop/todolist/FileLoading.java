@@ -4,11 +4,11 @@ import java.io.*;
 import java.text.ParseException;
 import java.util.List;
 
-class FileLoading  {
+class FileLoading implements Load {
 
 
-
-    List<Task> loadFromFile(Account account) throws IOException, ParseException {
+    @Override
+    public List<Task> loadFromFile(Account account) throws IOException, ParseException{
             try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(account.getName() + "/" + account.getName() + "'s ToDoList.txt"))) {
                 return (List<Task>)input.readObject();
             } catch (IOException | ClassNotFoundException e) {

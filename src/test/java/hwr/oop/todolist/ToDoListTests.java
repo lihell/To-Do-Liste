@@ -1,7 +1,8 @@
 package hwr.oop.todolist;
 
 
-import java.io.FileNotFoundException;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -174,12 +175,28 @@ public class ToDoListTests {
         }
 
         @Test
+        void setName() {
+            Account acc = new Account();
+            acc.setName("Amelia");
+            Assertions.assertThat(acc.getName()).isEqualTo("Amelia");
+        }
+
+        @Test
         void passwordIsNotGiven() {
             try {
-                Account noPassword = new Account("MyName", "");
+                Account noPassword = new Account();
+                noPassword.setPassword("");
+                noPassword.setName("Amelia");
             } catch (NullPointerException e) {
-                e.printStackTrace();
+                System.out.println("You need to write a password");
             }
+        }
+
+        @Test
+        void setPassword() {
+            Account acc = new Account();
+            acc.setPassword("Haiho3021");
+            Assertions.assertThat(acc.getPassword()).isEqualTo("Haiho3021");
         }
 
         @Test
@@ -201,14 +218,15 @@ public class ToDoListTests {
         class FileTest {
 
             @Test
-            void canVerifyExistingAccount() throws IOException {
+            void canVerifyExistingAccount() {
+                // have to create Folder for Account first
                 Account acc = new Account("Nila", "Hallo123");
                 FileVerify verify = new FileVerify();
                 Assertions.assertThat(verify.verifyAccount(acc)).isEqualTo(true);
             }
 
             @Test
-            void canGiveErrorForNonExistingAccount() throws IOException {
+            void canGiveErrorForNonExistingAccount() {
                 Account acc = new Account("Max", "M31N3_B4HN");
                 FileVerify verify = new FileVerify();
                 Assertions.assertThat(verify.verifyAccount(acc)).isEqualTo(false);
@@ -218,8 +236,20 @@ public class ToDoListTests {
             void canCreateFolderForNewAccount() throws IOException {
                 Account acc = new Account("Nila", "Hallo123");
                 FileSaving save = new FileSaving();
+                File directory = new File(acc.getName());
                 save.createFolderForAccount(acc);
+                Assertions.assertThat(directory.exists()).isEqualTo(true);
             }
+
+            @Test
+            void checkIfDirectoryIsCreated() throws IOException{
+                Account acc = new Account("Sophie", "Diamond");
+                FileSaving save = new FileSaving();
+                File directory = new File(acc.getName());
+                save.createFolderForAccount(acc);
+                Assertions.assertThat(directory.exists()).isEqualTo(true);
+            }
+
 
             @Test
             void canCreateFoldersForMoreThanOneAccount() throws  IOException {
@@ -227,13 +257,34 @@ public class ToDoListTests {
                 Account accOne = new Account("Mani", "myMoney340");
                 Account accTwo = new Account("Sara", "headEmptyAlways11111");
                 FileSaving save = new FileSaving();
+                File directory1 = new File(acc.getName());
+                File directory2 = new File(accOne.getName());
+                File directory3 = new File(accTwo.getName());
                 save.createFolderForAccount(acc);
                 save.createFolderForAccount(accOne);
                 save.createFolderForAccount(accTwo);
+                Assertions.assertThat(directory1.exists()).isEqualTo(true);
+                Assertions.assertThat(directory2.exists()).isEqualTo(true);
+                Assertions.assertThat(directory3.exists()).isEqualTo(true);
+            }
+
+            @Test
+            void noPasswordToSave() throws IOException {
+                Account account = new Account();
+                account.setName("Mira");
+                FileSaving save = new FileSaving();
+                try {
+                    save.createFolderForAccount(account);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Test
             void saveToDoListToAccountFolder() throws ParseException, IOException {
+                Account account = new Account("Nila", "Hallo123");
+                File directory = new File(account.getName());
+                String filenameList = account.getName() + "'s ToDoList.txt";
                 Date today = new SimpleDateFormat("yyyy-MM-dd").parse("2020-05-10");
                 Task task = new Task();
                 ToDoList todo = new ToDoList();
@@ -241,13 +292,15 @@ public class ToDoListTests {
                 task.setTitle("Homework");
                 task.setDate(today);
                 todo.addTask(task);
-                save.writeToDoListToFile(todo, new Account("Sara", "headEmptyAlways11111"));
+                File toDoList = new File(directory, filenameList);
+                save.writeToDoListToFile(todo, account);
+                Assertions.assertThat(!(toDoList.length() == 0)).isEqualTo(true);
             }
 
             @Test
             void readToDoListFromAccount() throws IOException, ParseException {
                 FileLoading load = new FileLoading();
-                List<Task> list = load.loadFromFile(new Account("Sara", "headEmptyAlways11111"));
+                List<Task> list = load.loadFromFile(new Account("Nila", "Hallo123"));
                 Assertions.assertThat(list.size()).isEqualTo(1);
             }
 
@@ -255,14 +308,14 @@ public class ToDoListTests {
             void toDoListFromAccountWithEmptyToDoListFile() {
                 try {
                     FileLoading load = new FileLoading();
-                    List<Task> list = load.loadFromFile(new Account("Nila", "myMoney340"));
+                    List<Task> list = load.loadFromFile(new Account("Mani", "myMoney340"));
                 } catch (IOException | ParseException e) {
                     e.printStackTrace();
                 }
             }
 
             @Test
-            void tryToWriteToDoListToNotExistingAccount() throws ParseException, IOException {
+            void tryToWriteToDoListToNotExistingAccount() throws ParseException {
                 FileSaving save = new FileSaving();
                 Date today = new SimpleDateFormat("yyyy-MM-dd").parse("2020-05-10");
                 Task task = new Task();
@@ -277,46 +330,5 @@ public class ToDoListTests {
                 }
             }
         }
-    /*@Nested
-    class MenuFunctionTest {
-        ToDoList todo;
-        @BeforeEach
-        void setUp() {
-            todo = new ToDoList();
-        }
-
-        @Test
-        void addFunctionWorks() throws ParseException, IOException {
-            MenuFunction menu = new MenuFunction();
-            menu.addFunction();
-            int sizeAfterOneTaskAdded = todo.getToDoList().size();
-            Assertions.assertThat(todo.getToDoList().size()+1).isNotEqualTo(sizeAfterOneTaskAdded);
-        }
-
-        @Test
-        void addFunctionWrongDateFormat() {
-            MenuFunction menu = new MenuFunction();
-            try {
-                menu.addFunction();
-            } catch (ParseException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-        @Test
-        void addNewAccount() throws IOException {
-            MenuFunction menu = new MenuFunction();
-            menu.createNewAccount();
-        }
-
-        @Test
-        void addNewAccountAlreadyExists() throws IOException {
-            // Needs to already have Account saved in account.txt
-            // Used saved Account is Balu/B00kJu
-            MenuFunction menu = new MenuFunction();
-            menu.createNewAccount();
-        }
-
-
-    }*/
 }
 
