@@ -219,7 +219,7 @@ public class ToDoListTests {
 
             @Test
             void canVerifyExistingAccount() {
-                // have to create Folder for Account first
+                // have to create Folder for Account first, otherwise will return false
                 Account acc = new Account("Nila", "Hallo123");
                 FileVerify verify = new FileVerify();
                 Assertions.assertThat(verify.verifyAccount(acc)).isEqualTo(true);
@@ -325,7 +325,7 @@ public class ToDoListTests {
                 todo.addTask(task);
                 try {
                     save.writeToDoListToFile(todo, new Account("Bella", "n0t3x12t1ng"));
-                } catch (IOException e){
+                } catch (NullPointerException e){
                     e.printStackTrace();
                 }
             }

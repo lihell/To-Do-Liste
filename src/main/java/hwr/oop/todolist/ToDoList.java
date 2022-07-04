@@ -31,7 +31,7 @@ class ToDoList {
     }
 
     Task getTaskFromList(int index) {
-        return this.toDoList.get(index);
+        return toDoList.get(index);
     }
 
 }

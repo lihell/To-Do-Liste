@@ -12,7 +12,7 @@ class FileLoading implements Load {
             try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(account.getName() + "/" + account.getName() + "'s ToDoList.txt"))) {
                 return (List<Task>)input.readObject();
             } catch (IOException | ClassNotFoundException e) {
-                System.out.println("File is empty. First thing you need to do is create a task!");
+                System.out.println("File is empty.");
             }
         return null;
         }

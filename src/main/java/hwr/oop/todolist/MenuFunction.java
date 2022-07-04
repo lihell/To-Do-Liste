@@ -10,16 +10,19 @@ class MenuFunction {
 
     Save saving = new FileSaving();
     Load loading = new FileLoading();
-    Verify verify = new FileVerify();
     private final ToDoList todo;
     private final Scanner reader;
     private final DateFormat formatter;
+    Account acc;
+
 
 
     MenuFunction() {
         todo = new ToDoList();
         reader = new Scanner(System.in);
         formatter = new SimpleDateFormat("yyyy-MM-dd");
+        formatter.setLenient(false);
+        acc = new Account();
     }
     
     String userInput() {
@@ -37,15 +40,18 @@ class MenuFunction {
     }
 
     void chooseLogIn() throws IOException, ParseException {
+        logInDisplay();
         int choice = reader.nextInt();
         if (choice == 1) {
-            createNewAccount();
+            CreateNewAccount newAccount = new CreateNewAccountFunction();
+            newAccount.createNewAccount();
+            chooseLogIn();
         } else if (choice == 2) {
-            logIn();
+            LogIn login = new LogInFunction();
+            login.logIn();
             displayOptionsList();
         }
     }
-
     void displayOptionsList() throws ParseException, IOException {
         System.out.println("---------------------------------------------------------------------------------------------------------------------");
         System.out.println("                To Do List          ");
@@ -60,164 +66,29 @@ class MenuFunction {
         System.out.println(" Enter correct option");
         int choice = reader.nextInt();
         if (choice == 1) {
-            displayListFromAccount();
+            DisplayListFromAccount display = new DisplayListFromAccountFunction();
+            display.displayListFromAccount();
         } else if (choice == 2) {
-            loading.loadFromFile(logIn());
-            addFunction();
-            saving.writeToDoListToFile(todo, logIn());
+            Add add = new AddFunction();
+            loading.loadFromFile(acc);
+            add.addFunction();
         } else if (choice == 3) {
-            changeStatus();
+            ChangeStatus status = new ChangeStatusFunction();
+            status.changeStatus();
         } else if (choice == 4) {
-            loading.loadFromFile(logIn());
-            deleteFunction();
-            saving.writeToDoListToFile(todo, logIn());
+            DeleteTask delete = new DeleteTaskFunction();
+            loading.loadFromFile(acc);
+            delete.deleteFunction();
+            saving.writeToDoListToFile(todo, acc);
         } else if (choice == 5) {
-            loading.loadFromFile(logIn());
-            deleteAllFunction();
-            saving.writeToDoListToFile(todo, logIn());
+            DeleteAll deleteAll = new DeleteAllFunction();
+            loading.loadFromFile(acc);
+            deleteAll.deleteAllFunction();
+            saving.writeToDoListToFile(todo, acc);
         } else if (choice == 6) {
             System.exit(0);
         } else {
             displayOptionsList();
-        }
-    }
-
-
-    void createNewAccount() throws IOException {
-        System.out.println("Create A New Account \n");
-        System.out.println("Name of the Account:");
-
-        Account acc = new Account();
-        acc.setName(userInput());
-        System.out.println("What is your new password?");
-        acc.setPassword(userInput());
-        if (!(verify.verifyAccount(acc))) {
-            System.out.println("You have successfully made an Account");
-        } else {
-            System.out.println("An Account with these parameters already exists, please choose a different name/password");
-            logInDisplay();
-        }
-        saving.createFolderForAccount(acc);
-        logIn();
-    }
-
-    void displayListFromAccount() throws ParseException, IOException {
-        try {
-        if (!(logIn() == null)) {
-            Account acc = logIn();
-            todo.setToDoList(loading.loadFromFile(acc));
-            todo.getToDoList().forEach(System.out::println);
-        }
-        } catch (IOException | ParseException e) {
-            System.out.println("You are not signed in yet\n");
-            System.out.println("Please make an Account first/Sign into your Account before calling a List");
-            displayOptionsList();
-        }
-    }
-
-    Account logIn() throws IOException {
-        System.out.println("Please tell us your Account");
-        System.out.println("The name of the Account: ");
-
-        Account acc = new Account();
-        acc.setName(userInput());
-        System.out.println("Your Password: ");
-        acc.setPassword(userInput());
-        if (verify.verifyAccount(acc)) {
-            System.out.println("Welcome back, " + acc.getName() + ", " + acc.getPassword());
-        } else {
-            System.out.println("This Account does not exist");
-            System.out.println("Please choose an existing Account or make a new one");
-        }
-        return new Account(acc.getName(), acc.getPassword());
-    }
-
-    void addFunction() throws ParseException, IOException {
-        System.out.println("Add New Task To List \n");
-        System.out.println("name of Task:");
-
-        Task task = new Task();
-        task.setTitle(userInput());
-        task.setStatus(Status.INCOMPLETE);
-        System.out.println("What is the Due Date? format (yyyy-MM-dd)");
-        try {
-            task.setDate(formatter.parse(userInput()));
-        } catch (ParseException e){
-            System.out.println("Input of date was in wrong format. REQUIRED FORMAT: (yyyy-MM-dd)");
-        }
-        todo.addTask(task);
-    }
-
-    void changeStatus() throws IOException, ParseException {
-        System.out.println("What task do you want to mark as done? \n ");
-        todo.setToDoList(loading.loadFromFile(logIn()));
-        List<Task> listOfToDos = todo.getToDoList();
-        for (Task list :listOfToDos) {
-            System.out.print(listOfToDos.indexOf(list) + 1 + ". ");
-            System.out.println(String.format("%1$-25s", list.getTitle()));
-        }
-        System.out.println("\n Enter the number in front of the task that you want to mark DONE (0 -> return to Menu)");
-        Task searched = new Task();
-
-        try {
-            int getTaskAtIndex = Integer.parseInt(userInput());
-
-            if (getTaskAtIndex != 0) {
-                searched = todo.getTaskFromList(getTaskAtIndex - 1);
-            } else {
-                displayOptionsList();
-            }
-        } catch (Exception e) {
-            System.out.println("Task with selected index does not exist. Select number in front of task again: ");
-            Integer.parseInt(userInput());
-        }
-        searched.setStatus(Status.DONE);
-        System.out.println("Task is now set to DONE");
-    }
-
-    void deleteFunction() throws IOException, ParseException {
-        System.out.println("Which Task Would You Like To Delete? \n");
-        todo.setToDoList(loading.loadFromFile(logIn()));
-        List<Task> listOfToDos= todo.getToDoList();
-        for (Task list : listOfToDos) {
-            System.out.print(listOfToDos.indexOf(list) + 1 + ". ");
-            System.out.println(String.format("%1$-25s", list.getTitle()));
-        }
-        System.out.println("Write down the number of which task you want to DELETE (0 -> return to Menu");
-
-        try {
-            int removeByTaskNumber = Integer.parseInt(userInput());
-
-            if (removeByTaskNumber != 0) {
-                todo.deleteTask(removeByTaskNumber - 1);
-            } else {
-                displayOptionsList();
-            }
-        } catch (Exception e) {
-            System.out.println("Task with selected index does not exist. Select number in front of task again:");
-        }
-        System.out.println("Task is removed");
-    }
-
-    void deleteAllFunction() throws IOException, ParseException {
-        System.out.println("Do you want to delete all Tasks? \n");
-        todo.setToDoList(loading.loadFromFile(logIn()));
-        List<Task> listOfToDos= todo.getToDoList();
-        for (Task list : listOfToDos) {
-            System.out.print(listOfToDos.indexOf(list) + 1 + ". ");
-            System.out.println(String.format("%1$-25s", list.getTitle()));
-        }
-        System.out.println("If you want to delete all Tasks press any number but 0 (0 -> return to Menu)");
-        try {
-            int removeAllTasks = Integer.parseInt(userInput());
-
-            if (removeAllTasks != 0) {
-                todo.deleteAll();
-            } else {
-                displayOptionsList();
-            }
-        } catch (Exception e) {
-            System.out.println("Please put in a number");
         }
     }
 }
