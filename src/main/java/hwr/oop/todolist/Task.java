@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
-class Task implements Serializable {
+public class Task implements Serializable {
     private Date date;
     private Status status = Status.INCOMPLETE;
     private String title;

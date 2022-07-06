@@ -1,8 +1,10 @@
-package hwr.oop.todolist;
+package hwr.oop.todolist.Menu;
+
+import hwr.oop.todolist.Account;
 
 import java.io.IOException;
 
-public class CreateNewAccountFunction implements CreateNewAccount {
+class CreateNewAccountFunction implements CreateNewAccount {
 
     @Override
     public void createNewAccount() {

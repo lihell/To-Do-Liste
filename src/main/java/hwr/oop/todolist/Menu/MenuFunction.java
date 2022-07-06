@@ -1,4 +1,11 @@
-package hwr.oop.todolist;
+package hwr.oop.todolist.Menu;
+
+import hwr.oop.todolist.Account;
+import hwr.oop.todolist.FileLoading;
+import hwr.oop.todolist.FileSaving;
+import hwr.oop.todolist.Load;
+import hwr.oop.todolist.Save;
+import hwr.oop.todolist.ToDoList;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -52,7 +59,7 @@ class MenuFunction {
             displayOptionsList();
         }
     }
-    void displayOptionsList() throws ParseException, IOException {
+    void displayOptionsList() {
         System.out.println("---------------------------------------------------------------------------------------------------------------------");
         System.out.println("                To Do List          ");
         System.out.println("---------------------------------------------------------------------------------------------------------------------");
@@ -60,10 +67,13 @@ class MenuFunction {
         System.out.println("    2- Add New Task            ");
         System.out.println("    3- Change Status           ");
         System.out.println("    4- Delete Task             ");
-        System.out.println("    5- Delete List             ");
-        System.out.println("    6- Exit                    ");
+        System.out.println("    5- Exit                    ");
         System.out.println("---------------------------------------------------------------------------------------------------------------------");
         System.out.println(" Enter correct option");
+
+    }
+
+    void displayChoice() throws IOException, ParseException {
         int choice = reader.nextInt();
         if (choice == 1) {
             DisplayListFromAccount display = new DisplayListFromAccountFunction();
@@ -81,11 +91,6 @@ class MenuFunction {
             delete.deleteFunction();
             saving.writeToDoListToFile(todo, acc);
         } else if (choice == 5) {
-            DeleteAll deleteAll = new DeleteAllFunction();
-            loading.loadFromFile(acc);
-            deleteAll.deleteAllFunction();
-            saving.writeToDoListToFile(todo, acc);
-        } else if (choice == 6) {
             System.exit(0);
         } else {
             displayOptionsList();

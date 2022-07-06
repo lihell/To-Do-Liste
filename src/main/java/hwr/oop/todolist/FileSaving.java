@@ -2,11 +2,12 @@ package hwr.oop.todolist;
 
 import org.jetbrains.annotations.NotNull;
 import java.io.*;
-import java.util.List;
+import java.util.Date;
 
 
-class FileSaving implements Save {
-    private List<Task> listOfToDos;
+public class FileSaving implements Save {
+    Task initiationTask = new Task();
+    private Date date = new Date();
 
     @Override
     public void createFolderForAccount(@NotNull Account account) throws IOException {
@@ -34,6 +35,16 @@ class FileSaving implements Save {
             System.out.println("ToDoList is already there");
         } else {
             listFile.createNewFile();
+            try (ObjectOutputStream out = new ObjectOutputStream((new FileOutputStream(  account.getName() + "/" + account.getName() + "'s ToDoList.txt")))) {
+                ToDoList todo = new ToDoList();
+                initiationTask.setTitle("DONT DELETE THIS");
+                initiationTask.setDate(date);
+                todo.addTask(initiationTask);
+                out.writeObject(todo.getToDoList());
+            } catch (IOException | NullPointerException e) {
+                System.out.println("You dont have a ToDoList ");
+                e.printStackTrace();
+            }
         }
     }
 

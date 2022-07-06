@@ -1,11 +1,13 @@
-package hwr.oop.todolist;
+package hwr.oop.todolist.Menu;
 
-import java.awt.*;
+import hwr.oop.todolist.*;
+import hwr.oop.todolist.ToDoList;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Scanner;
 
-public interface MenuFunctions {
+interface MenuFunctions {
     MenuFunction menu = new MenuFunction();
     Save saving = new FileSaving();
     ToDoList todo = new ToDoList();

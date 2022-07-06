@@ -1,25 +1,28 @@
-package hwr.oop.todolist;
+package hwr.oop.todolist.Menu;
+
+import hwr.oop.todolist.Task;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
 
-public class DeleteTaskFunction implements DeleteTask {
+class DeleteTaskFunction implements DeleteTask {
 
     @Override
     public void deleteFunction() {
         System.out.println("Which Task Would You Like To Delete? \n");
         try {
             todo.setToDoList(loading.loadFromFile(acc));
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            List<Task> listOfToDos = todo.getToDoList();
+            for (Task list : listOfToDos) {
+                System.out.print(listOfToDos.indexOf(list) + 1 + ". ");
+                System.out.println(String.format("%1$-25s", list.getTitle()));
+            }
+        } catch (NullPointerException | IOException e) {
+            System.out.println("There is no Account");
+            System.out.println("You can't get a To Do List when you aren't logged into an Account");
         }
-        List<Task> listOfToDos = todo.getToDoList();
-        for (Task list : listOfToDos) {
-            System.out.print(listOfToDos.indexOf(list) + 1 + ". ");
-            System.out.println(String.format("%1$-25s", list.getTitle()));
-        }
-        System.out.println("Write down the number of which task you want to DELETE (0 -> return to Menu");
+        System.out.println("Write down the number of which task you want to DELETE (0 -> return to Menu)");
         boolean check = true;
 
         while (check) {
@@ -34,6 +37,7 @@ public class DeleteTaskFunction implements DeleteTask {
                 }
             } catch (Exception e) {
                 System.out.println("Task with selected index does not exist.");
+                check = false;
             }
         }
         try {
@@ -41,7 +45,6 @@ public class DeleteTaskFunction implements DeleteTask {
         } catch (NullPointerException | IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Task is removed");
     }
 
     @Override

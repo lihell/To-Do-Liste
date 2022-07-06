@@ -1,5 +1,6 @@
-package hwr.oop.todolist;
+package hwr.oop.todolist.Menu;
 
+import hwr.oop.todolist.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,8 +8,11 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.List;
 
 public class MenuFunctionTests {
+    // Tests for classes with user input
+
     ToDoList todo;
     MenuFunction menu;
     Verify verify = new FileVerify();
@@ -21,9 +25,7 @@ public class MenuFunctionTests {
     }
 
     @Test
-    void addFunctionWorks() throws IOException, ParseException {
-        Account acc = new Account("Balu", "b00kJu");
-        loading.loadFromFile(acc);
+    void addFunctionWorks() {
         LogIn login = new LogInFunction();
         login.logIn();
         Add add = new AddFunction();
@@ -35,6 +37,18 @@ public class MenuFunctionTests {
     @Test
     void addFunctionWrongDateFormat() {
         //Write wrong date format (the right date format is yyyy-MM-dd)
+        try {
+            LogIn login = new LogInFunction();
+            Add add = new AddFunction();
+            login.logIn();
+            add.addFunction();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void addFunctionWithoutAnAccount() {
         try {
             Add add = new AddFunction();
             add.addFunction();
@@ -70,7 +84,7 @@ public class MenuFunctionTests {
     }
 
     @Test
-    void logInAccountDoesntExist() throws IOException {
+    void logInAccountDoesntExist() {
         // use the Account (name:Manuela, password:M0N3YB1TCH)
         Account acc = new Account("Manuela", "M0N3YB1TCH");
         LogIn login = new LogInFunction();
@@ -81,6 +95,7 @@ public class MenuFunctionTests {
     @Test
     void canChangeTheTasksStatus() throws IOException, ParseException {
         // Use Nila Account, already has ToDoList in it
+        //Set first Task to DONE
         Account acc = new Account("Nila", "Hallo123");
         LogIn login = new LogInFunction();
         ChangeStatus status = new ChangeStatusFunction();
@@ -106,23 +121,33 @@ public class MenuFunctionTests {
 
     @Test
     void tryToChangeStatusOfTaskWithNoAccountSet() {
+        //try to change the first Task
         ChangeStatus status = new ChangeStatusFunction();
-        try {
-            status.changeStatus();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+        status.changeStatus();
+        Assertions.assertThat(todo.getTaskFromList(1)).isEqualTo(Status.INCOMPLETE);
     }
 
     @Test
-    void deleteOneTaskFunctionWorks() throws IOException, ParseException {
+    void deleteOneTaskFunctionWorks() throws IOException {
+        ToDoList notDeletedToDo = new ToDoList();
         Account acc = new Account("Nila", "Hallo123");
+        notDeletedToDo.setToDoList(loading.loadFromFile(acc));
         LogIn login = new LogInFunction();
         DeleteTask delete = new DeleteTaskFunction();
         login.logIn();
         delete.deleteFunction();
         todo.setToDoList(loading.loadFromFile(acc));
-        Assertions.assertThat(todo.getToDoList().size()).isEqualTo(0);
+        Assertions.assertThat(todo.getToDoList()).isNotEqualTo(notDeletedToDo.getToDoList());
+    }
+
+    @Test
+    void goToMenuWhen0FromDeleteFunction() throws IOException, ParseException {
+        Account acc = new Account("Nila", "Hallo123");
+        LogIn login = new LogInFunction();
+         List<Task> beforeDelete = loading.loadFromFile(acc);
+        DeleteTask delete = new DeleteTaskFunction();
+        login.logIn();
+        delete.deleteFunction();
     }
 
     @Test
@@ -140,43 +165,9 @@ public class MenuFunctionTests {
     @Test
     void tryToDeleteTaskFromListWithoutAccount() {
         try {
-            LogIn login = new LogInFunction();
             DeleteTask delete = new DeleteTaskFunction();
-            login.logIn();
             delete.deleteFunction();
         } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    void deleteAllTasksFunction()  {
-        LogIn login = new LogInFunction();
-        DeleteAll deleteAll = new DeleteAllFunction();
-        login.logIn();
-        deleteAll.deleteAllFunction();
-    }
-
-    @Test
-    void tryToDeleteAllWithoutAccount() {
-        try {
-            LogIn login = new LogInFunction();
-            DeleteAll deleteAll = new DeleteAllFunction();
-            login.logIn();
-            deleteAll.deleteAllFunction();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    void tryToDeleteAllButDoesntUseNumbersButLetters() {
-        try {
-            LogIn login = new LogInFunction();
-            DeleteAll deleteAll = new DeleteAllFunction();
-            login.logIn();
-            deleteAll.deleteAllFunction();
-        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -185,19 +176,6 @@ public class MenuFunctionTests {
     void displayTheListWithNoAccountGiven() {
         try {
             DisplayListFromAccount display = new DisplayListFromAccountFunction();
-            display.displayListFromAccount();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Test
-    void displayListFromAccountWithEmptyList() {
-        //use any Account that doesnt have a filled List yet
-        try {
-            DisplayListFromAccount display = new DisplayListFromAccountFunction();
-            LogIn login = new LogInFunction();
-            login.logIn();
             display.displayListFromAccount();
         } catch (NullPointerException e) {
             e.printStackTrace();

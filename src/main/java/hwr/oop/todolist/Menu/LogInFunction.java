@@ -1,6 +1,6 @@
-package hwr.oop.todolist;
+package hwr.oop.todolist.Menu;
 
-public class LogInFunction implements LogIn {
+class LogInFunction implements LogIn {
 
     @Override
     public void logIn() {

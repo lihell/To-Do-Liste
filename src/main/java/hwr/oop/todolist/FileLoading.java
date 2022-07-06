@@ -1,19 +1,18 @@
 package hwr.oop.todolist;
 
 import java.io.*;
-import java.text.ParseException;
 import java.util.List;
 
-class FileLoading implements Load {
+public class FileLoading implements Load {
 
 
     @Override
-    public List<Task> loadFromFile(Account account) throws IOException, ParseException{
+    public List<Task> loadFromFile(Account account) throws IOException {
             try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(account.getName() + "/" + account.getName() + "'s ToDoList.txt"))) {
                 return (List<Task>)input.readObject();
-            } catch (IOException | ClassNotFoundException e) {
+            } catch (ClassNotFoundException e) {
                 System.out.println("File is empty.");
             }
-        return null;
+            return null;
         }
     }

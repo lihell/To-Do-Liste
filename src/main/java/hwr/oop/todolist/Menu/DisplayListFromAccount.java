@@ -1,4 +1,4 @@
-package hwr.oop.todolist;
+package hwr.oop.todolist.Menu;
 
 public interface DisplayListFromAccount extends MenuFunctions {
 
