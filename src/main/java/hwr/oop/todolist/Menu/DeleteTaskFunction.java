@@ -3,7 +3,6 @@ package hwr.oop.todolist.Menu;
 import hwr.oop.todolist.Task;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 
 class DeleteTaskFunction implements DeleteTask {

@@ -9,11 +9,12 @@ import java.text.ParseException;
 class AddFunction implements Add {
 
     @Override
-    public void addFunction() {
+    public void addFunction() throws IOException {
         try {
             todo.setToDoList(loading.loadFromFile(acc));
         } catch (NullPointerException | IOException e) {
             System.out.println("You need to be logged into an Account first");
+            menu.returnMenu();
         }
             formatter.setLenient(false);
             System.out.println("Add New Task To List \n");

@@ -3,7 +3,6 @@ package hwr.oop.todolist.Menu;
 import hwr.oop.todolist.Task;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 
 class DisplayListFromAccountFunction implements DisplayListFromAccount {
@@ -25,6 +24,7 @@ class DisplayListFromAccountFunction implements DisplayListFromAccount {
             System.out.println("Your List could not be loaded");
             System.out.println("Your problem could be that you haven't signed in with an Account yet: ");
             System.out.println("In this case you should logIn first");
+
         }
     }
 }

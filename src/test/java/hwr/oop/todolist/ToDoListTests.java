@@ -221,7 +221,7 @@ public class ToDoListTests {
 
         @Test
         void checkIfDirectoryIsCreated() throws IOException{
-            Account acc = new Account("Sophie", "Diamond");
+            Account acc = new Account("Nila", "Hallo123");
             FileSaving save = new FileSaving();
             File directory = new File(acc.getName());
             save.createFolderForAccount(acc);
@@ -247,15 +247,67 @@ public class ToDoListTests {
         }
 
         @Test
-        void noPasswordToSave() {
+        void usernameIsEmptyString() {
+            Account acc = new Account();
+            acc.setName("");
+            acc.setPassword("3M9TY");
+            FileSaving save = new FileSaving();
+            try {
+                save.createFolderForAccount(acc);
+            } catch (NullPointerException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Test
+        void usernameToSaveIsNull() {
+            Account account = new Account();
+            account.setPassword("IH4V3N0N4M3");
+            FileSaving save = new FileSaving();
+            try {
+                save.createFolderForAccount(account);
+            } catch (NullPointerException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Test
+        void passwordToSaveIsEmptyString() {
+            Account acc = new Account();
+            acc.setName("Miranda");
+            FileSaving save = new FileSaving();
+            File directory = new File(acc.getName());
+            try {
+                save.createFolderForAccount(acc);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Assertions.assertThat(directory.exists()).isEqualTo(false);
+        }
+
+        @Test
+        void passwordAndUsernameToSaveAreNull() {
+            Account acc = new Account();
+            FileSaving save = new FileSaving();
+            try {
+                save.createFolderForAccount(acc);
+            } catch (NullPointerException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Test
+        void passwordToSaveIsNull() {
             Account account = new Account();
             account.setName("Mira");
             FileSaving save = new FileSaving();
+            File directory = new File(account.getName());
             try {
                 save.createFolderForAccount(account);
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            Assertions.assertThat(directory.exists()).isEqualTo(false);
         }
 
         @Test

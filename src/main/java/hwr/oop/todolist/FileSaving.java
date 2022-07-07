@@ -3,16 +3,20 @@ package hwr.oop.todolist;
 import org.jetbrains.annotations.NotNull;
 import java.io.*;
 import java.util.Date;
+import java.util.Objects;
 
 
 public class FileSaving implements Save {
-    Task initiationTask = new Task();
     private Date date = new Date();
 
     @Override
-    public void createFolderForAccount(@NotNull Account account) throws IOException {
+    public void createFolderForAccount(@NotNull Account account) throws IOException, NullPointerException {
+        if (account.getName() == null || Objects.equals(account.getName(), "")) {
+            throw new NullPointerException("You don't have a Username");
+        }
         String filenamePassword = account.getName() + "'s Password.txt";
         String filenameList = account.getName() + "'s ToDoList.txt";
+
         File directory = new File(account.getName());
         if (directory.exists() && directory.isDirectory()) {
             System.out.println("This Account already exists");
@@ -20,30 +24,32 @@ public class FileSaving implements Save {
             directory.mkdirs();
         }
         File passwordFile = new File(directory, filenamePassword);
-        if (passwordFile.exists() && passwordFile.isFile()) {
-            System.out.println("Password is already there");
+        if (account.getPassword() == null || Objects.equals(account.getPassword(), "")) {
+            System.out.println("You don't have a password");
+            System.out.println("You can't have a Account without a password");
+            directory.delete();
         } else {
-            passwordFile.createNewFile();
-            try (FileWriter writer = new FileWriter(passwordFile)) {
-                writer.write(account.getPassword());
-            } catch (NullPointerException | IOException e) {
-                System.out.println("No Password has been set");
+            if (passwordFile.exists() && passwordFile.isFile()) {
+                System.out.println("Password is already there");
+        } else {
+                passwordFile.createNewFile();
+                try (FileWriter writer = new FileWriter(passwordFile)) {
+                    writer.write(account.getPassword());
+                } catch (NullPointerException | IOException e) {
+                    System.out.println("No Password has been set");
+                }
             }
         }
         File listFile = new File(directory, filenameList);
-        if (listFile.exists() && listFile.isFile()) {
-            System.out.println("ToDoList is already there");
-        } else {
-            listFile.createNewFile();
-            try (ObjectOutputStream out = new ObjectOutputStream((new FileOutputStream(  account.getName() + "/" + account.getName() + "'s ToDoList.txt")))) {
-                ToDoList todo = new ToDoList();
-                initiationTask.setTitle("DONT DELETE THIS");
-                initiationTask.setDate(date);
-                todo.addTask(initiationTask);
-                out.writeObject(todo.getToDoList());
-            } catch (IOException | NullPointerException e) {
-                System.out.println("You dont have a ToDoList ");
-                e.printStackTrace();
+        if (directory.exists() && passwordFile.exists()) {
+            if (listFile.exists() && listFile.isFile()) {
+                System.out.println("ToDoList is already there");
+            } else {
+                listFile.createNewFile();
+                try (ObjectOutputStream out = new ObjectOutputStream((new FileOutputStream(account.getName() + "/" + account.getName() + "'s ToDoList.txt")))) {
+                    ToDoList todo = new ToDoList();
+                    out.writeObject(todo.getToDoList());
+                }
             }
         }
     }
@@ -53,13 +59,13 @@ public class FileSaving implements Save {
 
         try (ObjectOutputStream out = new ObjectOutputStream((new FileOutputStream(  account.getName() + "/" + account.getName() + "'s ToDoList.txt")))) {
             out.writeObject(todo.getToDoList());
+            System.out.println("TASKS SAVED: ");
+            System.out.println();
+            todo.getToDoList().forEach(task -> System.out.println("* " + task.getTitle()));
         } catch (IOException | NullPointerException e) {
             System.out.println("Couldn't find the File to write the ToDoList in, " + e);
             System.out.println("Your problem could be your Account, try to open your Account again");
         }
-        System.out.println("TASKS SAVED: ");
-        System.out.println();
-        todo.getToDoList().forEach(task -> System.out.println("* " + task.getTitle()));
     }
 
 }

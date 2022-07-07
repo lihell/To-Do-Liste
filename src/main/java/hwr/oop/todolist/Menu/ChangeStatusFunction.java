@@ -4,13 +4,12 @@ import hwr.oop.todolist.Status;
 import hwr.oop.todolist.Task;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.List;
 
 class ChangeStatusFunction implements ChangeStatus {
 
     @Override
-    public void changeStatus() {
+    public void changeStatus() throws IOException {
         System.out.println("What task do you want to mark as done? \n ");
         try {
             todo.setToDoList(loading.loadFromFile(acc));
@@ -21,7 +20,7 @@ class ChangeStatusFunction implements ChangeStatus {
                 System.out.println(String.format("%1$-25s", list.getStatus()));
             }
         } catch (IOException | NullPointerException e) {
-            System.out.println("The Account isnt set");
+            System.out.println("The Account isn't set");
             System.out.println("Cant read ToDoList from nonexistent Account");
             menu.displayOptionsList();
         }

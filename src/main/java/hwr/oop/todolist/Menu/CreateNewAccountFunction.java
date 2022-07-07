@@ -7,7 +7,7 @@ import java.io.IOException;
 class CreateNewAccountFunction implements CreateNewAccount {
 
     @Override
-    public void createNewAccount() {
+    public void createNewAccount() throws IOException {
         System.out.println("Create A New Account \n");
         System.out.println("Name of the Account:");
 
@@ -16,10 +16,10 @@ class CreateNewAccountFunction implements CreateNewAccount {
         System.out.println("What is your new password?");
         acc.setPassword(userInput());
         if (!(verify.verifyAccount(acc))) {
-            System.out.println("You have successfully made an Account");
+            System.out.println("Your Account is being made");
         } else {
             System.out.println("An Account with these parameters already exists, please choose a different name/password");
-            //logInDisplay();
+            menu.logInDisplay();
         }
         try {
             saving.createFolderForAccount(acc);

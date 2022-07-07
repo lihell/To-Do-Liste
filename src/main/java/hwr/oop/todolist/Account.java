@@ -22,7 +22,7 @@ public class Account implements Serializable {
 
 
     public void setPassword(String password) {
-        if(!(password == "")) {
+        if(!(password == "" || password == null)) {
                 this.password = password;
         } else {
             System.out.println("You need to write a password");
@@ -35,7 +35,7 @@ public class Account implements Serializable {
     }
 
     public void setName(String name) {
-        if (!(name == "")) {
+        if (!(name == "" || name == null)) {
                 this.name = name;
         } else {
             System.out.println("You need to write a name");

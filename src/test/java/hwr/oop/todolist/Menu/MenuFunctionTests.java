@@ -25,7 +25,7 @@ public class MenuFunctionTests {
     }
 
     @Test
-    void addFunctionWorks() {
+    void addFunctionWorks() throws IOException {
         LogIn login = new LogInFunction();
         login.logIn();
         Add add = new AddFunction();
@@ -42,7 +42,7 @@ public class MenuFunctionTests {
             Add add = new AddFunction();
             login.logIn();
             add.addFunction();
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -52,12 +52,12 @@ public class MenuFunctionTests {
         try {
             Add add = new AddFunction();
             add.addFunction();
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IOException e) {
             e.printStackTrace();
         }
     }
     @Test
-    void addingNewAccountWorks()  {
+    void addingNewAccountWorks() throws IOException {
         // name for Account to create is Bina
         File directory = new File("Bina");
         CreateNewAccount newAccount = new CreateNewAccountFunction();
@@ -66,7 +66,27 @@ public class MenuFunctionTests {
     }
 
     @Test
-    void addNewAccountAlreadyExists()  {
+    void addingNewAccountWithNameIsNull() {
+        CreateNewAccount newAccount = new CreateNewAccountFunction();
+        try {
+            newAccount.createNewAccount();
+        } catch (IOException | NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void addingNewAccountWithPasswordIsNull() throws IOException{
+        Account acc = new Account();
+        acc.setName("Manja");
+        File directory = new File(acc.getName());
+        CreateNewAccount newAccount = new CreateNewAccountFunction();
+        newAccount.createNewAccount();
+        Assertions.assertThat(directory.exists()).isEqualTo(false);
+    }
+
+    @Test
+    void addNewAccountAlreadyExists() throws IOException {
         // Needs to already have Account saved in account.txt
         // Used saved Account is Balu/B00kJu
         Account acc = new Account("Balu", "b00kJu");
@@ -108,19 +128,19 @@ public class MenuFunctionTests {
     @Test
     void tryToChangeStatusOfTaskThatDoesntExist() {
         // Use Nila Account, already has ToDoList in it
-        // input number of Task that doesnt exist
+        // input number of Task that doesn't exist
         LogIn login = new LogInFunction();
         ChangeStatus status = new ChangeStatusFunction();
         try {
             login.logIn();
             status.changeStatus();
-        } catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException | IOException e) {
             e.printStackTrace();
         }
     }
 
     @Test
-    void tryToChangeStatusOfTaskWithNoAccountSet() {
+    void tryToChangeStatusOfTaskWithNoAccountSet() throws IOException {
         //try to change the first Task
         ChangeStatus status = new ChangeStatusFunction();
         status.changeStatus();
@@ -141,13 +161,14 @@ public class MenuFunctionTests {
     }
 
     @Test
-    void goToMenuWhen0FromDeleteFunction() throws IOException, ParseException {
+    void goToMenuWhen0FromDeleteFunction() throws IOException {
         Account acc = new Account("Nila", "Hallo123");
         LogIn login = new LogInFunction();
          List<Task> beforeDelete = loading.loadFromFile(acc);
         DeleteTask delete = new DeleteTaskFunction();
         login.logIn();
         delete.deleteFunction();
+        Assertions.assertThat(beforeDelete).isEqualTo(todo.getToDoList());
     }
 
     @Test

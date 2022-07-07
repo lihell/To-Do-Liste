@@ -8,9 +8,11 @@ This repository contains a student project created for an ongoing lecture on obj
 
 ## Abstract
 
-Description : This Project is a ToDoList.  
+Description : This Project is a ToDoList.
+
 Important Features : You can create an Account that has a To Do List. Can add a Task to the List. Can delete a Task or all Tasks. Can have multiple Accounts with different To Do Lists. Saves Accounts and To Do Lists in Directories and Files.
-[TODO]: # (State the most interesting problems you encountered during the project.)
+
+Interesting Problems: The Problem of ErrorHandling, what you want your code to do after it runs into an Error. To read a File and write into a File, the multiple ways to handle Files. 
 
 ## Feature List
 
