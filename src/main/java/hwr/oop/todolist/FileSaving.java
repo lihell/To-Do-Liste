@@ -14,7 +14,6 @@ public class FileSaving implements Save {
         if (account.getName() == null || Objects.equals(account.getName(), "")) {
             throw new NullPointerException("You don't have a Username");
         }
-
         String filenamePassword = account.getName() + "'s Password.txt";
         String filenameList = account.getName() + "'s ToDoList.txt";
 

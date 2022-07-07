@@ -29,7 +29,6 @@ public class Account implements Serializable {
         }
     }
 
-
     public String getPassword() {
         return password;
     }
