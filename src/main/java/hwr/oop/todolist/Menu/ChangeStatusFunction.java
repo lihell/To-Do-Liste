@@ -22,9 +22,9 @@ class ChangeStatusFunction implements ChangeStatus {
         } catch (IOException | NullPointerException e) {
             System.out.println("The Account isn't set");
             System.out.println("Cant read ToDoList from nonexistent Account");
-            menu.displayOptionsList();
+            menu.returnMenu();
         }
-        System.out.println("\n Enter the number in front of the task that you want to mark DONE (0 -> return to Menu)");
+        System.out.println("\n Enter the number in front of the task that you want to mark DONE (0 -> return to Menu Selection)");
         Task searched = new Task();
         boolean check = true;
 
@@ -38,7 +38,7 @@ class ChangeStatusFunction implements ChangeStatus {
                     System.out.println("Task is now set to DONE");
                     check = false;
                 } else {
-                    menu.displayOptionsList();
+                    menu.returnMenu();
                 }
             } catch (IndexOutOfBoundsException e) {
                 System.out.println("Task with selected index does not exist.");

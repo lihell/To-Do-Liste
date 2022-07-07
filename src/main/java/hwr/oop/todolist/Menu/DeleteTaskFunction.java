@@ -21,7 +21,7 @@ class DeleteTaskFunction implements DeleteTask {
             System.out.println("There is no Account");
             System.out.println("You can't get a To Do List when you aren't logged into an Account");
         }
-        System.out.println("Write down the number of which task you want to DELETE (0 -> return to Menu)");
+        System.out.println("Write down the number of which task you want to DELETE (0 -> return to Menu Selection)");
         boolean check = true;
 
         while (check) {
@@ -32,7 +32,7 @@ class DeleteTaskFunction implements DeleteTask {
                     todo.deleteTask(removeByTaskNumber - 1);
                     check = false;
                 } else {
-                    menu.displayOptionsList();
+                    menu.returnMenu();
                 }
             } catch (Exception e) {
                 System.out.println("Task with selected index does not exist.");

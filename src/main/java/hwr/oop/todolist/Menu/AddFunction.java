@@ -9,12 +9,11 @@ import java.text.ParseException;
 class AddFunction implements Add {
 
     @Override
-    public void addFunction() throws IOException {
+    public void addFunction() {
         try {
             todo.setToDoList(loading.loadFromFile(acc));
         } catch (NullPointerException | IOException e) {
             System.out.println("You need to be logged into an Account first");
-            menu.returnMenu();
         }
             formatter.setLenient(false);
             System.out.println("Add New Task To List \n");
@@ -31,7 +30,7 @@ class AddFunction implements Add {
                     todo.addTask(task);
                     check = false;
                 } catch (ParseException | NullPointerException e) {
-                    System.out.println("Input of date was in wrong format. REQUIRED FORMAT: (yyyy-MM-dd)");
+                    System.out.println("Input of date was in wrong format or not given. REQUIRED FORMAT: (yyyy-MM-dd)");
                     check = false;
                 }
             }

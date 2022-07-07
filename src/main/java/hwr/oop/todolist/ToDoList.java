@@ -7,6 +7,12 @@ public class ToDoList {
     private List<Task> toDoList = new ArrayList<>();
 
     public void addTask(Task task) {
+        if (task.getTitle() == null) {
+            throw new NullPointerException("You can't have a Task without a name");
+        }
+        if (task.getDate() == null) {
+            throw new NullPointerException("You can't have a Task without a Date");
+        }
         toDoList.add(task);
     }
 

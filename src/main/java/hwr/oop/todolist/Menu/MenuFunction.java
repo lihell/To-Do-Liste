@@ -1,41 +1,21 @@
 package hwr.oop.todolist.Menu;
 
-import hwr.oop.todolist.Account;
-import hwr.oop.todolist.FileLoading;
-import hwr.oop.todolist.FileSaving;
-import hwr.oop.todolist.Load;
-import hwr.oop.todolist.Save;
-import hwr.oop.todolist.ToDoList;
+import hwr.oop.todolist.*;
 
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-class MenuFunction {
-
-    Save saving = new FileSaving();
-    Load loading = new FileLoading();
-    private final ToDoList todo;
-    private final Scanner reader;
-    private final DateFormat formatter;
-    Account acc;
+public class MenuFunction implements MenuFunctions {
 
 
 
-    MenuFunction() {
-        todo = new ToDoList();
-        reader = new Scanner(System.in);
-        formatter = new SimpleDateFormat("yyyy-MM-dd");
-        formatter.setLenient(false);
-        acc = new Account();
-    }
-    
-    String userInput() {
-        return reader.nextLine();
+    public MenuFunction() {
     }
 
-    void logInDisplay() throws IOException {
+
+    void logInDisplay() {
         System.out.println("---------------------------------------------------------------------------------------------------------------------");
         System.out.println("        Account            ");
         System.out.println("---------------------------------------------------------------------------------------------------------------------\"");
@@ -43,16 +23,16 @@ class MenuFunction {
         System.out.println("    2- Sign In             ");
         System.out.println("---------------------------------------------------------------------------------------------------------------------\"");
         System.out.println("Please enter your Choice");
-        chooseLogIn();
     }
 
-    void chooseLogIn() throws IOException {
+    public void chooseLogIn() throws IOException {
         logInDisplay();
-        int choice = reader.nextInt();
+        int choice = Integer.parseInt(reader.nextLine());
         if (choice == 1) {
             CreateNewAccount newAccount = new CreateNewAccountFunction();
             newAccount.createNewAccount();
-            logInDisplay();
+            System.out.println("Please logIn with your Account now");
+            chooseLogIn();
         } else if (choice == 2) {
             LogIn login = new LogInFunction();
             login.logIn();
@@ -65,9 +45,10 @@ class MenuFunction {
         System.out.println("---------------------------------------------------------------------------------------------------------------------");
         System.out.println("    1- Display List            ");
         System.out.println("    2- Add New Task            ");
-        System.out.println("    3- Change Status           ");
-        System.out.println("    4- Delete Task             ");
-        System.out.println("    5- Exit                    ");
+        System.out.println("    3- Edit A Task             ");
+        System.out.println("    4- Change Status           ");
+        System.out.println("    5- Delete Task             ");
+        System.out.println("    6- Exit                    ");
         System.out.println("---------------------------------------------------------------------------------------------------------------------");
         System.out.println(" Enter correct option");
         displayChoice();
@@ -75,33 +56,41 @@ class MenuFunction {
 
     void returnMenu() throws IOException {
         System.out.println("Do you want to go back to the Main Menu (Type 1)");
-        System.out.println("Would you like to exit the program (Type anything else");
-        int choice = reader.nextInt();
+        System.out.println("Do you want to go back to the Account menu (Type 2)");
+        System.out.println("Would you like to exit the program (Type anything else)");
+        int choice = Integer.parseInt(reader.nextLine());
         if (choice == 1) {
             displayOptionsList();
+        } else if (choice == 2) {
+            logInDisplay();
         } else {
             System.exit(0);
         }
     }
 
     void displayChoice() throws IOException {
-        int choice = reader.nextInt();
+        int choice = Integer.parseInt(reader.nextLine());
         if (choice == 1) {
             DisplayListFromAccount display = new DisplayListFromAccountFunction();
             display.displayListFromAccount();
+            returnMenu();
         } else if (choice == 2) {
             Add add = new AddFunction();
-            loading.loadFromFile(acc);
             add.addFunction();
-        } else if (choice == 3) {
+            returnMenu();
+        }else if (choice == 3){
+            EditTask edit = new EditTaskFunction();
+            edit.editTask();
+            returnMenu();
+        } else if (choice == 4) {
             ChangeStatus status = new ChangeStatusFunction();
             status.changeStatus();
-        } else if (choice == 4) {
-            DeleteTask delete = new DeleteTaskFunction();
-            loading.loadFromFile(acc);
-            delete.deleteFunction();
-            saving.writeToDoListToFile(todo, acc);
+            returnMenu();
         } else if (choice == 5) {
+            DeleteTask delete = new DeleteTaskFunction();
+            delete.deleteFunction();
+            returnMenu();
+        } else if (choice == 6) {
             System.exit(0);
         } else {
             displayOptionsList();

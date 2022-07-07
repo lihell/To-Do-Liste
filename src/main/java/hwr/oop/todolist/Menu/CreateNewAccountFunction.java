@@ -19,7 +19,7 @@ class CreateNewAccountFunction implements CreateNewAccount {
             System.out.println("Your Account is being made");
         } else {
             System.out.println("An Account with these parameters already exists, please choose a different name/password");
-            menu.logInDisplay();
+            menu.returnMenu();
         }
         try {
             saving.createFolderForAccount(acc);

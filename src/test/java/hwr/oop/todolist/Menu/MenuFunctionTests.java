@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
@@ -48,7 +49,32 @@ public class MenuFunctionTests {
     }
 
     @Test
+    void addFunctionWithNoDate() {
+        try {
+            LogIn login = new LogInFunction();
+            Add add = new AddFunction();
+            login.logIn();
+            add.addFunction();
+        } catch (NullPointerException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void addFunctionWithNoTitle() {
+        try {
+            LogIn login = new LogInFunction();
+            Add add = new AddFunction();
+            login.logIn();
+            add.addFunction();
+        } catch (NullPointerException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     void addFunctionWithoutAnAccount() {
+        // leads to Menu Selection
         try {
             Add add = new AddFunction();
             add.addFunction();
@@ -56,6 +82,7 @@ public class MenuFunctionTests {
             e.printStackTrace();
         }
     }
+
     @Test
     void addingNewAccountWorks() throws IOException {
         // name for Account to create is Bina
@@ -89,6 +116,7 @@ public class MenuFunctionTests {
     void addNewAccountAlreadyExists() throws IOException {
         // Needs to already have Account saved in account.txt
         // Used saved Account is Balu/B00kJu
+        // leads to Menu Selection
         Account acc = new Account("Balu", "b00kJu");
         CreateNewAccount newAccount = new CreateNewAccountFunction();
         newAccount.createNewAccount();
@@ -113,7 +141,26 @@ public class MenuFunctionTests {
     }
 
     @Test
-    void canChangeTheTasksStatus() throws IOException, ParseException {
+    void logInWithNoName() {
+        LogIn login = new LogInFunction();
+        try {
+            login.logIn();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void logInWithNoPassword() {
+        Account acc = new Account();
+        acc.setName("Madame");
+        LogIn login = new LogInFunction();
+        login.logIn();
+        Assertions.assertThat(verify.verifyAccount(acc)).isEqualTo(false);
+    }
+
+    @Test
+    void canChangeTheTasksStatus() throws IOException {
         // Use Nila Account, already has ToDoList in it
         //Set first Task to DONE
         Account acc = new Account("Nila", "Hallo123");
@@ -209,6 +256,37 @@ public class MenuFunctionTests {
         LogIn login = new LogInFunction();
         login.logIn();
         display.displayListFromAccount();
+    }
+
+    @Test
+    void editTaskWorks() throws IOException {
+        Account acc = new Account("Nila", "Hallo123");
+        Task notChangedTask = loading.loadFromFile(acc).get(0);
+        EditTask edit = new EditTaskFunction();
+        LogIn login = new LogInFunction();
+        login.logIn();
+        edit.editTask();
+        Task changedTask = loading.loadFromFile(acc).get(0);
+        Assertions.assertThat(notChangedTask.getTitle()).isNotEqualTo(changedTask.getTitle());
+    }
+
+    @Test
+    void editTaskDoesntWorkWithWrongDate() throws IOException {
+        Account acc = new Account("Nila", "Hallo123");
+        Task notChangedTask = loading.loadFromFile(acc).get(0);
+        EditTask edit = new EditTaskFunction();
+        LogIn login = new LogInFunction();
+        login.logIn();
+        edit.editTask();
+        Task changedTask = loading.loadFromFile(acc).get(0);
+        Assertions.assertThat(notChangedTask.getTitle()).isEqualTo(changedTask.getTitle());
+    }
+
+    @Test
+    void editTaskWithoutAccount() throws IOException {
+        // leads to return Menu
+        EditTask edit = new EditTaskFunction();
+        edit.editTask();
     }
 }
 

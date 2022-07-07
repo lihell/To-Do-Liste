@@ -99,7 +99,7 @@ public class ToDoListTests {
         }
 
         @Test
-        void ifTitleNotGivenOrNullThrowsException() {
+        void ifTitleNotGivenThrowsException() {
             try {
                 task.setTitle("");
                 task.setStatus(Status.INCOMPLETE);
@@ -107,7 +107,6 @@ public class ToDoListTests {
                 e.printStackTrace();
             }
         }
-
 
         @Test
         void taskStatusCanBeSet() {
@@ -144,6 +143,18 @@ public class ToDoListTests {
             task.setStatus(Status.INCOMPLETE);
             todo.addTask(task1);
             Assertions.assertThat(initialListSize+1).isEqualTo(todo.getToDoList().size());
+        }
+
+        @Test
+        void addTaskWithNoName() throws ParseException{
+            task.setStatus(Status.INCOMPLETE);
+            Date today = new SimpleDateFormat("yyyy-MM-dd").parse("2020-05-10");
+            task.setDate(today);
+            try {
+                todo.addTask(task);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
 
         @Test

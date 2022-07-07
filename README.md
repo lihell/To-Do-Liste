@@ -18,9 +18,21 @@ Interesting Problems: The Problem of ErrorHandling, what you want your code to d
 
 [TODO]: # (For each feature implemented, add a row to the table!)
 
-| Number | Feature | Tests |
-|--------|---------|-------|
-| 1      | /       | /     |
+| Number | Feature                                                                                       | Tests |
+|--------|-----------------------------------------------------------------------------------------------|-------|
+| 1      | Task has title, status and date                                                               | 4     |
+| 2      | ToDoList can add task to a List, delete task from a List, get Task from List                  | 6     |
+| 3      | An Account has name and password                                                              | 8     |
+| 4      | You can create and save an account with name (directory) with password (File) and List (File) | 8     |
+| 5      | You can save your ToDoList into a File                                                        | 2     |
+| 6      | Can Verify if your Account exists or not                                                      | 2     |
+| 7      | Can load your ToDoList from the File                                                          | 1     |
+| 8      | add a Task to your Accounts List (with input)                                                 | 5     |
+| 9      | add a new Account (with input)                                                                | 4     |
+| 10     | can logIn to an already existing Account  (with input)                                        | 4     |
+| 11     | can change the status of a Task from an Accounts ToDoList (with input)                        | 3     |
+| 12     | can delete a Task from an Accounts ToDoList (with input)                                      | 4     |
+| 13     | can display the ToDoList from an Account                                                      | 2     |
 
 
 ## Additional Dependencies
