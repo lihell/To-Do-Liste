@@ -27,6 +27,7 @@ public class MenuFunctionTests {
 
     @Test
     void addFunctionWorks() throws IOException {
+        // input correct
         LogIn login = new LogInFunction();
         login.logIn();
         Add add = new AddFunction();
@@ -50,6 +51,7 @@ public class MenuFunctionTests {
 
     @Test
     void addFunctionWithNoDate() {
+        //give no date / press enter without writing date
         try {
             LogIn login = new LogInFunction();
             Add add = new AddFunction();
@@ -62,6 +64,7 @@ public class MenuFunctionTests {
 
     @Test
     void addFunctionWithNoTitle() {
+        //give no title / press enter without writing title
         try {
             LogIn login = new LogInFunction();
             Add add = new AddFunction();
@@ -86,6 +89,7 @@ public class MenuFunctionTests {
     @Test
     void addingNewAccountWorks() throws IOException {
         // name for Account to create is Bina
+        //password: HolyMolyFolyKoly
         File directory = new File("Bina");
         CreateNewAccount newAccount = new CreateNewAccountFunction();
         newAccount.createNewAccount();
@@ -94,6 +98,7 @@ public class MenuFunctionTests {
 
     @Test
     void addingNewAccountWithNameIsNull() {
+        // dont write Account Name / press enter with no input
         CreateNewAccount newAccount = new CreateNewAccountFunction();
         try {
             newAccount.createNewAccount();
@@ -104,6 +109,7 @@ public class MenuFunctionTests {
 
     @Test
     void addingNewAccountWithPasswordIsNull() throws IOException{
+        // dont write Account Password / press enter with no input
         Account acc = new Account();
         acc.setName("Manja");
         File directory = new File(acc.getName());
@@ -142,6 +148,7 @@ public class MenuFunctionTests {
 
     @Test
     void logInWithNoName() {
+        // dont put in a name
         LogIn login = new LogInFunction();
         try {
             login.logIn();
@@ -152,6 +159,7 @@ public class MenuFunctionTests {
 
     @Test
     void logInWithNoPassword() {
+        // dont put in a password
         Account acc = new Account();
         acc.setName("Madame");
         LogIn login = new LogInFunction();
@@ -209,6 +217,7 @@ public class MenuFunctionTests {
 
     @Test
     void goToMenuWhen0FromDeleteFunction() throws IOException {
+        // press 0 when asked to select Tasks
         Account acc = new Account("Nila", "Hallo123");
         LogIn login = new LogInFunction();
          List<Task> beforeDelete = loading.loadFromFile(acc);
@@ -220,6 +229,7 @@ public class MenuFunctionTests {
 
     @Test
     void tryToDeleteButDoesntUseNumbersButLetters() {
+        // when asked to select, dont use a number, use letter
         try {
             LogIn login = new LogInFunction();
             DeleteTask delete = new DeleteTaskFunction();

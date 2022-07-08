@@ -206,6 +206,8 @@ public class ToDoListTests {
     }
     @Nested
     class FileTest {
+        // For correct testing purposes: delete all Accounts beforehand
+
         @Test
         void canVerifyExistingAccount() {
             // have to create Folder for Account first, otherwise will return false

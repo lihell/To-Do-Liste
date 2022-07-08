@@ -32,7 +32,8 @@ Interesting Problems: The Problem of ErrorHandling, what you want your code to d
 | 10     | can logIn to an already existing Account  (with input)                                        | 4     |
 | 11     | can change the status of a Task from an Accounts ToDoList (with input)                        | 3     |
 | 12     | can delete a Task from an Accounts ToDoList (with input)                                      | 4     |
-| 13     | can display the ToDoList from an Account                                                      | 2     |
+| 13     | can display the ToDoList from an Account (with input)                                         | 2     |
+| 14     | can edit a Task from an Account  (with input)                                                 | 2     |
 
 
 ## Additional Dependencies
